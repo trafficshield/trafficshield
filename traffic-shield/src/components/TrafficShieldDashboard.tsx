@@ -1,13 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, Activity, AlertTriangle, Eye, EyeOff, Cpu, Globe, Lock, Unlock, TrendingUp, MapPin, Clock, Zap } from 'lucide-react';
 
+// Type definitions
+
+type TrafficData = {
+  id: number;
+  deviceId: string;
+  timestamp: string;
+  vehicleCount: number;
+  avgSpeed: number;
+  lightStatus: string;
+  anomalyScore: number;
+};
+
+type BlockchainData = {
+  id: number;
+  blockHash: string;
+  timestamp: string;
+  deviceId: string;
+  dataHash: string;
+  verified: boolean;
+};
+
+type Alert = {
+  id: number;
+  type: string;
+  severity: string;
+  message: string;
+  timestamp: string;
+  resolved: boolean;
+};
+
 const TrafficShieldDashboard = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [privacyMode, setPrivacyMode] = useState(true);
   const [selectedDevice, setSelectedDevice] = useState('TL-001');
-  const [alerts, setAlerts] = useState([]);
-  const [trafficData, setTrafficData] = useState([]);
-  const [blockchainData, setBlockchainData] = useState([]);
+  const [alerts, setAlerts] = useState<Alert[]>([]);
+  const [trafficData, setTrafficData] = useState<TrafficData[]>([]);
+  const [blockchainData, setBlockchainData] = useState<BlockchainData[]>([]);
 
   // Simulate real-time data
   useEffect(() => {
@@ -63,13 +93,13 @@ const TrafficShieldDashboard = () => {
     { id: 'TL-004', name: 'Elm St & 4th Ave', status: 'active' }
   ];
 
-  const resolveAlert = (alertId) => {
+  const resolveAlert = (alertId: number) => {
     setAlerts(prev => prev.map(alert => 
       alert.id === alertId ? { ...alert, resolved: true } : alert
     ));
   };
 
-  const getSeverityColor = (severity) => {
+  const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'HIGH': return 'bg-red-100 text-red-800 border-red-200';
       case 'MEDIUM': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
@@ -77,7 +107,7 @@ const TrafficShieldDashboard = () => {
     }
   };
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
       case 'active': return 'bg-green-100 text-green-800';
       case 'maintenance': return 'bg-orange-100 text-orange-800';
@@ -85,7 +115,7 @@ const TrafficShieldDashboard = () => {
     }
   };
 
-  const getLightColor = (status) => {
+  const getLightColor = (status: string) => {
     switch (status) {
       case 'RED': return 'bg-red-500';
       case 'YELLOW': return 'bg-yellow-500';
